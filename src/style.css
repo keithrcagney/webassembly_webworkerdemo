@@ -1,0 +1,112 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: black;
+  padding: 0;
+  margin: 0;
+  width: auto;
+  height: auto;
+}
+
+#titlebox, h1, h2 {
+  color: yellow;
+  text-align: center;
+  font-size: 25px;
+  margin: 0;
+  padding: 0;
+  text-shadow: 4px 4px rgba(174, 22, 204, 0.3);
+}
+
+h2 {
+  color: yellow;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  font-size: 18px;
+  text-shadow: 4px 4px rgba(174, 22, 204, 0.3), 4px 4px rgba(0, 0, 0, 0.3);
+  margin: 5px;
+}
+
+p#savage {
+  font-size: 30px;
+  padding: 10px;
+  margin: 0;
+}
+
+.yeahButton {
+  background-color: rebeccapurple;
+  font-family: fantasy;
+  font-weight: thin;
+  font-size: 40px;
+  border-radius: 5px;
+  box-shadow: 3px 3px rgba(49, 39, 39, 0.5);
+  color: yellow;
+  width: 99px;
+  height: 55px;
+  margin: 10px 0px;
+}
+
+#vanillaButton, #wasmButton, #workerButton {
+  background-color: rebeccapurple;
+  font-family: fantasy;
+  font-weight: thin;
+  font-size: 40px;
+  border-radius: 5px;
+  box-shadow: 3px 3px rgba(49, 39, 39, 0.5);
+  color: yellow;
+  width: 200px;
+  height: 55px;
+  margin: 0;
+}
+
+#yeahbox {
+  max-width: 100%;
+  min-height: 50px;
+  overflow-wrap: break-word;
+  height: auto;
+  background-color: steelblue;
+  color: thistle;
+  font-size: 2em;
+  font-weight: bold;
+}
+
+#container {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-evenly;
+  padding: 10px 40px;
+  margin: 0;
+  background-color: steelblue;
+}
+
+#column1, #column2, #column3 {
+  display: flex;
+  justify-content: center;
+  flex-flow: column nowrap;
+  align-items: center;
+  width: 50%;
+  height: 500px;
+}
+
+#vanillaThread, #wasmThread, #workerThread {
+  display: flex;
+  justify-content: center;
+  flex-flow: column nowrap;
+  align-items: center;
+  height: 250px;
+  width: 250px;
+  background-color: cornflowerblue;
+  border: 0.5px solid whitesmoke;
+}
+
+.randySavage {
+  animation: rotation 2s infinite linear;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}

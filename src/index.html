@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="style.css" type="text/css" rel="stylesheet">
+  <title>WebAssembly Multithreading</title>
+</head>
+
+<body>
+  <div id="titlebox">
+    <h1>Web Assembly Multithreading</h1>
+    <p id="savage">SAVAGE MATH nTH FIBONACCI EDITION</p>
+  </div>
+  <div id="yeahbox"></div>
+  
+  <div id="container">
+    <div id="column1">
+      <h2>Vanilla JavaScript Sandbox</h2>
+      <input type="text" id="vanillaValue"/>
+      <button class="yeahButton" onclick="onClickYeah()">YEAH</button>
+      <div id="vanillaThread">
+        
+        <button id="vanillaButton" onclick="doSavageMath()">DO MATH</button>
+
+        <script>
+          const yeahbox = document.querySelector('#yeahbox');
+          
+          function onClickYeah() {
+            const ohyeah = document.createElement('span');
+            ohyeah.innerText = "YEAH!";
+            ohyeah.id = "ohyeah";
+            yeahbox.appendChild(ohyeah);
+          }
+        </script>
+        
+        <script>
+          const container = document.body.querySelector('#container');
+          const column1 = container.querySelector('#column1');
+          const vanilla = column1.querySelector('#vanillaThread');
+
+          const doingMath = document.createElement('span');
+          doingMath.innerText = "Now doing some SAVAGE math..."
+
+          function doSavageMath(){
+            const vanillaValue = container.querySelector('#vanillaValue');
+            const num = parseInt(vanillaValue.value);
+            vanillaValue.value = '';
+            console.log(`Savage math num: ${num}`);
+            return savageMath(num);
+          }
+
+          function fib(num){
+            if (num <= 1) return 1;
+            return (fib(num-1)+fib(num-2));
+          };
+
+          function savageMath(num) {
+            vanilla.appendChild(doingMath);
+            let fibResult = fib(num);
+            console.log(`Number at Nth fib in SavageMath: ${fibResult}`);
+            return savageEnough(fibResult);
+          }
+
+          function savageEnough(n) {
+            if (n % 2 === 0) {
+                doingMath.innerText = '';
+                const evenRandy = document.createElement('img');
+                evenRandy.src = "evenrandy.jpg";
+                evenRandy.width = "220";
+                evenRandy.height = "130";
+                evenRandy.className = "randySavage";
+                vanilla.appendChild(evenRandy);
+                doingMath.innerText = 'EVEN the MACHO MAN knows that number is even!';
+                setTimeout(() => {
+                  vanilla.removeChild(evenRandy);
+                  vanilla.removeChild(doingMath);
+                }, 2000);
+                return;
+            } else {
+                doingMath.innerText = '';
+                const oddRandy = document.createElement('img');
+                oddRandy.src = "oddrandy.jpg";
+                oddRandy.width = "220";
+                oddRandy.height = "130";
+                oddRandy.className = "randySavage";
+                vanilla.appendChild(oddRandy);
+                doingMath.innerText = 'ODD that it took the MACHO MAN that long to see it!';
+                setTimeout(() => {
+                  vanilla.removeChild(oddRandy);
+                  vanilla.removeChild(doingMath);
+                }, 2000);
+                return;
+            }
+          }
+        </script>
+      </div>
+    </div>
+
+    <div id="column2">
+      <h2>WebAssembly from C++</h2>
+      <input type="text" id="wasmValue"/>
+      <button class="yeahButton" onclick="onClickYeah()">YEAH</button>
+
+      <div id="wasmThread">
+        <button id="wasmButton" onclick="doWasmMath()">DO MATH</button>
+        <script>
+          const column2 = container.querySelector('#column2');
+          const doingWasmMath = document.createElement('span');
+          doingWasmMath.innerText = "Now doing SAVAGE WebAssembly math...";
+          const wasm = column2.querySelector('#wasmThread');
+
+          const importObject = {
+            env: {
+              memoryBase: 0,
+              tableBase: 0,
+              memory: new WebAssembly.Memory({initial: 256}),
+              table: new WebAssembly.Table({initial: 0, element: 'anyfunc'}),
+              tempRet0: null,
+              setTempRet0: function(input){
+                console.log(`Input from setTempRet0: ${input}`);
+                this.tempRet0 = input;
+                console.log(this.tempRet0);
+                return this.tempRet0;
+              },
+              getTempRet0: function(){
+                return this.tempRet0;
+              },
+              CallJS: function(iVal){
+                return savageWasmEnough(iVal);
+              },
+            },
+          };
+    
+          WebAssembly.instantiateStreaming(fetch('savagemath.wasm'), importObject).then(result => {
+            wasmInstance = result.instance;
+          });
+
+          function doWasmMath(){
+            // Get the value from the textbox (convert the value from a string to an int
+            const wasmValue = container.querySelector('#wasmValue');
+            const wasmNum = parseInt(wasmValue.value);
+            
+            wasmValue.value = '';
+            wasm.appendChild(doingWasmMath);
+            // Call the method in the module
+            return wasmInstance.exports._Z6Savagei(wasmNum);
+          }
+
+          function savageWasmEnough(n) {
+            console.log(`Savage WASM: ${n}`);
+            if (n % 2 === 0) {
+                doingWasmMath.innerText = '';
+                let evenRandy = document.createElement('img');
+                evenRandy.src = "evenrandy.jpg";
+                evenRandy.width = "220";
+                evenRandy.height = "130";
+                evenRandy.className = "randySavage";
+                wasm.appendChild(evenRandy);
+                doingWasmMath.innerText = 'EVEN you must admit WASM is superior!';
+                setTimeout(() => {
+                  wasm.removeChild(evenRandy);
+                  wasm.removeChild(doingWasmMath);
+                }, 2000);
+            } else {
+                doingWasmMath.innerText = '';
+                let oddRandy = document.createElement('img');
+                oddRandy.src = "oddrandy.jpg";
+                oddRandy.width = "220";
+                oddRandy.height = "130";
+                oddRandy.className = "randySavage";
+                wasm.appendChild(oddRandy);
+                doingWasmMath.innerText = 'ODD that you doubted WebAssembly!';
+                setTimeout(() => {
+                  wasm.removeChild(oddRandy);
+                  wasm.removeChild(doingWasmMath);
+                }, 2000);
+                return;
+            }
+          }
+        </script>
+      </div>
+    </div>
+
+    <div id="column3">
+      <h2>WebAssembly x Web Workers</h2>
+      <input type="text" id="workerValue"/>
+      <button class="yeahButton" onclick="onClickYeah()">YEAH</button>
+
+      <div id="workerThread">
+        <button id="workerButton" onclick="doWorkerMath()">DO MATH</button>
+
+        <script>
+          const column3 = container.querySelector("#column3");
+          const worker = column3.querySelector('#workerThread');
+          const doingWorkerMath = document.createElement('span');
+          doingWorkerMath.innerText = "Now doing WORK.";
+
+          const wasmWorker = new Worker("worker.js");
+          wasmWorker.postMessage({"purpose": "INSTANTIATE", "modulePath":"savagemath.wasm"});
+          wasmWorker.onerror = (e) => {console.log(`Error in wasmWorker: `, err)};
+          wasmWorker.onmessage = (message) => {
+            console.log(`wasmWorker message received: `, message.data);
+            if (message.data.purpose === "CALL_JAVASCRIPT"){
+              return savageWorkerEnough(message.data.workerResult);
+            }
+          };
+
+          function doWorkerMath(){
+            const workerValue = document.querySelector('#workerValue');
+            const workerNum = parseInt(workerValue.value);
+            console.log(`workerNum: ${workerNum}`);
+            workerValue.value = '';
+            worker.appendChild(doingWorkerMath);
+            wasmWorker.postMessage({"purpose": "SAVAGE_MATH", "workerNum": workerNum});
+          }
+
+          function savageWorkerEnough(n) {
+          if (n % 2 === 0) {
+              doingWorkerMath.innerText = '';
+              let evenRandy = document.createElement('img');
+              evenRandy.src = "wasmrandy.jpg";
+              evenRandy.width = "220";
+              evenRandy.height = "130";
+              evenRandy.className = "randySavage";
+              worker.appendChild(evenRandy);
+              doingWorkerMath.innerText = 'EVEN that was easy work!';
+              setTimeout(() => {
+                worker.removeChild(evenRandy);
+                worker.removeChild(doingWasmMath);
+              }, 2000);
+          } else {
+              doingWorkerMath.innerText = '';
+              let oddRandy = document.createElement('img');
+              oddRandy.src = "wasmrandy.jpg";
+              oddRandy.width = "220";
+              oddRandy.height = "130";
+              oddRandy.className = "randySavage";
+              worker.appendChild(oddRandy);
+              doingWorkerMath.innerText = 'ODD that it works so well!';
+              setTimeout(() => {
+                worker.removeChild(oddRandy);
+                worker.removeChild(doingWorkerMath);
+              }, 2000);
+              return;
+          }
+        }
+
+        </script>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
